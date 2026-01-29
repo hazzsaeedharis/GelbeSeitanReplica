@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Font Faces */
+@font-face {
+  font-family: 'theSans';
+  src: url('/fonts/TheSansB4-3_Light.woff2') format('woff2'),
+       url('/fonts/TheSansB4-3_Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'theSans';
+  src: url('/fonts/TheSansB4-5_Plain.woff2') format('woff2'),
+       url('/fonts/TheSansB4-5_Plain.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'theSans';
+  src: url('/fonts/TheSansB4-7_Bold.woff2') format('woff2'),
+       url('/fonts/TheSansB4-7_Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Global Styles */
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --gs-yellow: #ffdc00;
+  --gs-black: #1e1e1e;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background-color: var(--gs-yellow);
+  font-family: 'theSans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Custom Utilities */
+@layer utilities {
+  .animate-fadeIn {
+    animation: fadeIn 0.5s ease-in;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* Header Sticky Behavior */
+.header-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: box-shadow 0.3s ease;
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus Styles for Accessibility */
+*:focus-visible {
+  outline: 2px solid var(--gs-yellow);
+  outline-offset: 2px;
+}

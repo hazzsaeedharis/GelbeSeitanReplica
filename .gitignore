@@ -30,6 +30,8 @@ htmlcov/
 
 # Node.js
 node_modules/
+/.pnp
+.pnp.js
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -38,13 +40,24 @@ yarn-error.log*
 out/
 .cache/
 
+# Testing
+/coverage
+
 # Environment variables
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+.env*.local
 *.env
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
 
 # IDE
 .vscode/
@@ -52,7 +65,11 @@ out/
 *.swp
 *.swo
 *~
+.cursor/
+
+# Misc
 .DS_Store
+*.pem
 
 # Database
 *.db
@@ -79,6 +96,13 @@ docker-compose.override.yml
 # Alembic
 alembic/__pycache__/
 alembic/versions/__pycache__/
+
+# Extraction artifacts
+/extracted-assets/
+/extracted-components/
+/webzip_*
+wget-test.html
+homepage-rendered.html
 
 # Large data files (optional - uncomment if needed)
 # data/raw/*.json
