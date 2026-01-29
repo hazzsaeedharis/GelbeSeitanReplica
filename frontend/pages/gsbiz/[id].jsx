@@ -134,7 +134,97 @@ export default function BusinessDetailPage() {
                 <link rel="stylesheet" href="/assets/gsbiz/css/custom-icons.css" />
                 <link rel="stylesheet" href="/assets/css/map-fullscreen.css" />
 
-                <style dangerouslySetInnerHTML={{ __html: ".mod-MarketplaceMobile__container { white-space: normal!important; }" }} />
+                <style dangerouslySetInnerHTML={{ __html: `
+                    .mod-MarketplaceMobile__container { white-space: normal!important; }
+                    
+                    /* Fix aktionsleiste button spacing and alignment */
+                    .aktionsleiste {
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 12px;
+                        padding: 20px;
+                        background: #fff;
+                        border-bottom: 2px solid #e0e0e0;
+                        border-radius: 3px;
+                    }
+                    
+                    .aktionsleiste-button {
+                        flex: 1 1 calc(50% - 6px);
+                        min-width: 200px;
+                    }
+                    
+                    @media (min-width: 768px) {
+                        .aktionsleiste-button {
+                            flex: 1 1 calc(25% - 9px);
+                        }
+                    }
+                    
+                    @media (min-width: 1200px) {
+                        .aktionsleiste-button {
+                            flex: 0 1 auto;
+                            min-width: 160px;
+                        }
+                    }
+                    
+                    .aktionsleiste-button .button,
+                    .aktionsleiste-button a.button {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 100%;
+                        height: 44px;
+                        padding: 8px 16px;
+                        background: #ffdc00;
+                        border-radius: 3px;
+                        text-decoration: none;
+                        color: #1e1e1e;
+                        font-weight: 500;
+                        transition: background 0.2s;
+                    }
+                    
+                    .aktionsleiste-button .button:hover,
+                    .aktionsleiste-button a.button:hover {
+                        background: #f5d400;
+                    }
+                    
+                    .aktionsleiste-button .button img,
+                    .aktionsleiste-button a.button img {
+                        flex-shrink: 0;
+                    }
+                    
+                    .aktionsleiste-button.inactive {
+                        opacity: 0.5;
+                        pointer-events: none;
+                    }
+                    
+                    /* Fix contact information section alignment */
+                    .mod-Kontaktdaten__list-item {
+                        display: flex;
+                        align-items: center;
+                        padding: 12px 0;
+                        gap: 12px;
+                    }
+                    
+                    .mod-Kontaktdaten__list-item img {
+                        flex-shrink: 0;
+                        margin-right: 0 !important;
+                    }
+                    
+                    .mod-Kontaktdaten__address-container {
+                        display: flex;
+                        align-items: flex-start;
+                        gap: 12px;
+                        padding: 12px 0;
+                    }
+                    
+                    .mod-Kontaktdaten__address-container .contains-icon-big-adresse {
+                        flex-shrink: 0;
+                    }
+                    
+                    .mod-Kontaktdaten__address-container .adresse-text {
+                        flex: 1;
+                    }
+                ` }} />
             </Head>
 
             <Script src="/assets/gsbiz/js/detailseite_above.js" strategy="afterInteractive" type="module" />
