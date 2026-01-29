@@ -134,97 +134,7 @@ export default function BusinessDetailPage() {
                 <link rel="stylesheet" href="/assets/gsbiz/css/custom-icons.css" />
                 <link rel="stylesheet" href="/assets/css/map-fullscreen.css" />
 
-                <style dangerouslySetInnerHTML={{ __html: `
-                    .mod-MarketplaceMobile__container { white-space: normal!important; }
-                    
-                    /* Fix aktionsleiste button spacing and alignment */
-                    .aktionsleiste {
-                        display: flex;
-                        flex-wrap: wrap;
-                        gap: 12px;
-                        padding: 20px;
-                        background: #fff;
-                        border-bottom: 2px solid #e0e0e0;
-                        border-radius: 3px;
-                    }
-                    
-                    .aktionsleiste-button {
-                        flex: 1 1 calc(50% - 6px);
-                        min-width: 200px;
-                    }
-                    
-                    @media (min-width: 768px) {
-                        .aktionsleiste-button {
-                            flex: 1 1 calc(25% - 9px);
-                        }
-                    }
-                    
-                    @media (min-width: 1200px) {
-                        .aktionsleiste-button {
-                            flex: 0 1 auto;
-                            min-width: 160px;
-                        }
-                    }
-                    
-                    .aktionsleiste-button .button,
-                    .aktionsleiste-button a.button {
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        width: 100%;
-                        height: 44px;
-                        padding: 8px 16px;
-                        background: #ffdc00;
-                        border-radius: 3px;
-                        text-decoration: none;
-                        color: #1e1e1e;
-                        font-weight: 500;
-                        transition: background 0.2s;
-                    }
-                    
-                    .aktionsleiste-button .button:hover,
-                    .aktionsleiste-button a.button:hover {
-                        background: #f5d400;
-                    }
-                    
-                    .aktionsleiste-button .button img,
-                    .aktionsleiste-button a.button img {
-                        flex-shrink: 0;
-                    }
-                    
-                    .aktionsleiste-button.inactive {
-                        opacity: 0.5;
-                        pointer-events: none;
-                    }
-                    
-                    /* Fix contact information section alignment */
-                    .mod-Kontaktdaten__list-item {
-                        display: flex;
-                        align-items: center;
-                        padding: 12px 0;
-                        gap: 12px;
-                    }
-                    
-                    .mod-Kontaktdaten__list-item img {
-                        flex-shrink: 0;
-                        margin-right: 0 !important;
-                    }
-                    
-                    .mod-Kontaktdaten__address-container {
-                        display: flex;
-                        align-items: flex-start;
-                        gap: 12px;
-                        padding: 12px 0;
-                    }
-                    
-                    .mod-Kontaktdaten__address-container .contains-icon-big-adresse {
-                        flex-shrink: 0;
-                    }
-                    
-                    .mod-Kontaktdaten__address-container .adresse-text {
-                        flex: 1;
-                    }
-                ` }} />
+                <style dangerouslySetInnerHTML={{ __html: ".mod-MarketplaceMobile__container { white-space: normal!important; }" }} />
             </Head>
 
             <Script src="/assets/gsbiz/js/detailseite_above.js" strategy="afterInteractive" type="module" />
@@ -460,7 +370,7 @@ export default function BusinessDetailPage() {
                                                     <div className="mod-TeilnehmerKopf__zusaetzliche-daten">
                                                         <address className="mod-TeilnehmerKopf__adresse">
                                                             <div className="mod-TeilnehmerKopf__adresse-icon-container">
-                                                                <img src="/assets/gsbiz/images/ic-adresse.svg" alt="Adresse" width={20} height={20} />
+
                                                             </div>
                                                             <div>
                                                                 {business.address.street && (
@@ -518,7 +428,7 @@ export default function BusinessDetailPage() {
                                                     {business.contact.email && (
                                                         <div className="aktionsleiste-button" tabIndex={0} data-isneededpromise="false">
                                                             <a href={`mailto:${business.contact.email}?subject=Anfrage über Gelbe Seiten`} className="button">
-                                                                <img src="/assets/gsbiz/images/ic-email.svg" alt="E-Mail" width={20} height={20} style={{ marginRight: '8px' }} />
+                                                                <img src="/assets/gsbiz/images/ic-mail-filled.svg" alt="E-Mail" style={{ width: '20px', height: '20px', marginRight: '8px' }} />
                                                                 <span>E-Mail</span>
                                                             </a>
                                                         </div>
@@ -528,7 +438,7 @@ export default function BusinessDetailPage() {
                                                         <div className="aktionsleiste-button" tabIndex={0}>
                                                             <a href={business.contact.website} target="_blank" tabIndex={-1} rel="noopener" title={business.contact.website}>
                                                                 <div className="button">
-                                                                    <img src="/assets/gsbiz/images/ic-webseite.svg" alt="Website" style={{ width: '20px', height: '20px', marginRight: '8px' }} />
+                                                                    <img src="/assets/gsbiz/images/ic-globe-filled.svg" alt="Website" style={{ width: '20px', height: '20px', marginRight: '8px' }} />
                                                                     <span>Website</span>
                                                                 </div>
                                                             </a>
@@ -609,8 +519,8 @@ export default function BusinessDetailPage() {
                                                                         </form>
                                                                         <div className="gc-text--h2">{business.name}</div>
                                                                         <div className="mod-Kontaktdaten__address-container">
-                                                                            <div className="contains-icon-big-adresse">
-                                                                                <img src="/assets/gsbiz/images/ic-adresse.svg" alt="Adresse" width={24} height={24} />
+                                                                            <div className="mod-Kontaktdaten__address-icon no-icon-pseudo" style={{ marginRight: '12px' }}>
+                                                                                <img src="/assets/gsbiz/images/ic-adresse.svg" alt="Adresse" width={24} height={24} style={{ verticalAlign: 'middle' }} />
                                                                             </div>
                                                                             <div className="adresse-text">
                                                                                 {business.address.street && <span>{business.address.street}, </span>}
@@ -624,7 +534,7 @@ export default function BusinessDetailPage() {
                                                                 </div>
 
                                                                 {business.contact.phone && (
-                                                                    <div className="mod-Kontaktdaten__list-item contains-icon-big-tel">
+                                                                    <div className="mod-Kontaktdaten__list-item no-icon-pseudo" style={{ display: 'flex', alignItems: 'center' }}>
                                                                         <img src="/assets/gsbiz/images/ic-telefon.svg" alt="Telefon" width={24} height={24} style={{ marginRight: '12px', verticalAlign: 'middle' }} />
                                                                         <span>
                                                                             <a className="nolink-grey" href={`tel:${business.contact.phone.replace(/\s/g, '')}`}>
@@ -635,7 +545,7 @@ export default function BusinessDetailPage() {
                                                                 )}
 
                                                                 {business.contact.website && (
-                                                                    <div className="mod-Kontaktdaten__list-item contains-icon-big-homepage">
+                                                                    <div className="mod-Kontaktdaten__list-item no-icon-pseudo" style={{ display: 'flex', alignItems: 'center' }}>
                                                                         <img src="/assets/gsbiz/images/ic-webseite.svg" alt="Website" width={24} height={24} style={{ marginRight: '12px', verticalAlign: 'middle' }} />
                                                                         <a href={business.contact.website} target="_blank" rel="noopener">
                                                                             <span>Webseite</span>
@@ -644,7 +554,8 @@ export default function BusinessDetailPage() {
                                                                 )}
 
                                                                 {business.location && (
-                                                                    <div className="mod-Kontaktdaten__list-item contains-icon-big-bahnurl">
+                                                                    <div className="mod-Kontaktdaten__list-item no-icon-pseudo" style={{ display: 'flex', alignItems: 'center' }}>
+                                                                        <img src="/assets/gsbiz/images/ic-anfahrt.svg" alt="Website" width={24} height={24} style={{ marginRight: '12px', verticalAlign: 'middle' }} />
                                                                         <a
                                                                             href={`https://www.google.com/maps/dir/?api=1&destination=${business.location.latitude},${business.location.longitude}`}
                                                                             target="_blank"

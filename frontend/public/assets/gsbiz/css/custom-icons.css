@@ -65,63 +65,46 @@
   height: 20px;
 }
 
-/* Contact detail icons */
+/* Contact detail icons - Disable pseudo-elements as we use img tags in JSX */
 .contains-icon-big-adresse::before {
-  content: '';
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background-image: url('/assets/gsbiz/images/ic-adresse.svg');
-  background-size: contain;
-  background-repeat: no-repeat;
-  margin-right: 10px;
-  vertical-align: middle;
+  display: none;
 }
 
 .contains-icon-big-tel::before {
-  content: '';
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background-image: url('/assets/gsbiz/images/ic-phone-filled.svg');
-  background-size: contain;
-  background-repeat: no-repeat;
-  margin-right: 10px;
-  vertical-align: middle;
+  display: none;
 }
 
 .contains-icon-big-homepage::before {
-  content: '';
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background-image: url('/assets/gsbiz/images/ic-globe-filled.svg');
-  background-size: contain;
-  background-repeat: no-repeat;
-  margin-right: 10px;
-  vertical-align: middle;
+  display: none;
 }
 
 .contains-icon-big-bahnurl::before {
-  content: '';
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background-image: url('/assets/gsbiz/images/ic-db.svg');
-  background-size: contain;
-  background-repeat: no-repeat;
-  margin-right: 10px;
-  vertical-align: middle;
+  display: none;
+}
+
+/* Helper class to force remove pseudo-elements */
+.no-icon-pseudo::before,
+.no-icon-pseudo::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 
 /* Address icon in header */
 .mod-TeilnehmerKopf__adresse-icon-container {
   width: 20px;
   height: 20px;
-  background-image: url('/assets/gsbiz/images/ic-location-pin.svg');
+  background-image: url('/assets/gsbiz/images/ic-adresse.svg');
   background-size: contain;
   background-repeat: no-repeat;
   flex-shrink: 0;
+}
+
+/* Hide the pseudo-element for the header address icon to prevent double icons */
+.mod-TeilnehmerKopf__adresse-icon-container::before {
+  display: none !important;
 }
 
 /* Opening hours icon in header */
@@ -206,6 +189,7 @@
   .mod-KarteImage {
     min-height: 362px;
   }
+
   .mod-KarteImage iframe {
     height: 362px;
   }

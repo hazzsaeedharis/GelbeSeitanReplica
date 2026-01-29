@@ -13,7 +13,7 @@ const MapView = dynamic(() => import('../../src/components/MapView'), {
 export default function BranchenSearch() {
   const router = useRouter()
   const { keyword, location } = router.query
-  
+
   const [results, setResults] = useState([])
   const [total, setTotal] = useState(0)
   const [loading, setLoading] = useState(true)
@@ -30,7 +30,7 @@ export default function BranchenSearch() {
       try {
         const keywordTerm = Array.isArray(keyword) ? keyword[0] : keyword
         const locationTerm = Array.isArray(location) ? location[0] : location
-        
+
         const searchKeyword = keywordTerm.replace(/_/g, ' ')
         const searchLocation = locationTerm.replace(/_/g, ' ')
 
@@ -88,7 +88,7 @@ export default function BranchenSearch() {
         <div className="mod mod-Suchanimation">
           <div id="suchanimation" className="mod-Suchanimation__balken"></div>
         </div>
-        
+
         <div id="transform_wrapper">
           <div className="mod mod-UntenNachObenButton">
             <div className="mod-UntenNachObenButton__icon-line" />
@@ -103,7 +103,7 @@ export default function BranchenSearch() {
                   <a href="/" target="_top" className="gc-header__logo">
                     <img className="gs_svg_image no-auto" src="/assets/branchen/images/gelbe-seiten-logo.svg" width={0} height={0} alt="Gelbe Seiten Unternehmen finden" />
                   </a>
-                  <div style={{display: 'flex', gap: '10px'}}>
+                  <div style={{ display: 'flex', gap: '10px' }}>
                     <div className="gc-header__a11ymobile" tabIndex={-1} aria-label="barrierefrei">
                       <a href="/gsservice/barrierefrei" className="gc-header__link">
                         <svg width={24} height={24} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -129,7 +129,7 @@ export default function BranchenSearch() {
                 </div>
               </div>
             </div>
-            
+
             {/* Search form section */}
             <div className="container"></div>
           </div>
@@ -172,8 +172,8 @@ export default function BranchenSearch() {
           </div>
 
           {/* Map Section */}
-          <div className="mod mod-KarteVorschau">
-            <div style={{ width: '100%', height: '260px', backgroundColor: '#f0f0f0' }}>
+          <div className="mod" style={{ marginBottom: '20px' }}>
+            <div style={{ width: '100%', height: '260px', backgroundColor: '#f0f0f0', position: 'relative' }}>
               <MapView businesses={results} height="260px" />
             </div>
           </div>
@@ -190,18 +190,18 @@ export default function BranchenSearch() {
                   (<span id="mod-TrefferlisteInfo">{total}</span> Treffer)
                 </h1>
               </div>
-              
+
               <div className="mod mod-FilterGruppe">
                 <form id="filterGruppe" autoComplete="off">
                   <input className="mod mod-Pille" id="pille_relevanz" name="sortierung" type="radio" defaultValue="relevanz" data-pillentyp="SORTIERUNG" defaultChecked />
                   <label className="mod mod-Pille" htmlFor="pille_relevanz">Beste Treffer</label>
-                  
+
                   <input className="mod mod-Pille" id="pille_bewertung" name="sortierung" type="radio" defaultValue="bewertung" data-pillentyp="SORTIERUNG" />
                   <label className="mod mod-Pille" htmlFor="pille_bewertung">Bewertung</label>
-                  
+
                   <input className="mod mod-Pille" id="pille_entfernung" name="sortierung" type="radio" defaultValue="entfernung" data-pillentyp="SORTIERUNG" />
                   <label className="mod mod-Pille" htmlFor="pille_entfernung">Entfernung</label>
-                  
+
                   <input className="mod mod-Pille" id="pille_geoeffnet" name="eigenschaft" type="checkbox" defaultValue="geoeffnet" data-pillentyp="EIGENSCHAFT" />
                   <label className="mod mod-Pille mod-Pille-checkbox" htmlFor="pille_geoeffnet">Geöffnet</label>
                 </form>
@@ -215,8 +215,8 @@ export default function BranchenSearch() {
               <div className="container">
                 <div className="flexbox-layout-container">
                   <div className="float-layout-container--left">
-                    <style type="text/css" dangerouslySetInnerHTML={{__html: ".mod-Treffer__logo { max-width: min(252px, 100%) !important; }"}} />
-                    
+                    <style type="text/css" dangerouslySetInnerHTML={{ __html: ".mod-Treffer__logo { max-width: min(252px, 100%) !important; }" }} />
+
                     <div id="teilnehmer_block" className="mod mod-Trefferbereich">
                       <div id="gs_treffer">
                         {loading ? (
@@ -236,14 +236,16 @@ export default function BranchenSearch() {
                                   {business.branches && business.branches.length > 0 ? `Branche: ${business.branches[0]}` : ''}
                                 </p>
                               </a>
-                              
+
                               <div className="mod-Treffer__line" />
-                              
+
                               <address className="mod-AdresseKompakt">
                                 <div>
                                   <div className="mod-AdresseKompakt__container">
-                                    <div className="mod-AdresseKompakt__adress contains-icon-big-adresse"></div>
-                                    <div className="mod-AdresseKompakt__adress-text">
+                                    <div className="mod-AdresseKompakt__adress no-icon-pseudo" style={{ marginRight: '6px' }}>
+                                      <img src="/assets/gsbiz/images/ic-adresse.svg" width={20} height={20} alt="Adresse" />
+                                    </div>
+                                    <div className="mod-AdresseKompakt__adress-text" style={{ marginLeft: 0 }}>
                                       {business.address}
                                       {business.lat && business.lon && (
                                         <span className="mod-AdresseKompakt__entfernung" title="Entfernung ab Suchmittelpunkt"></span>
@@ -252,20 +254,22 @@ export default function BranchenSearch() {
                                   </div>
                                 </div>
                               </address>
-                              
+
                               {business.phone && (
-                                <div className="mod-TelefonnummerKompakt">
-                                  <a className="mod-TelefonnummerKompakt__phoneNumber contains-icon-big-tel" 
-                                     href={`tel:${business.phone}`}
-                                     data-wipe-name="Kontaktdaten">
+                                <div className="mod-TelefonnummerKompakt no-icon-pseudo" style={{ display: 'flex', alignItems: 'center' }}>
+                                  <img src="/assets/gsbiz/images/ic-telefon.svg" width={20} height={20} alt="Telefon" style={{ marginRight: '6px' }} />
+                                  <a className="mod-TelefonnummerKompakt__phoneNumber"
+                                    href={`tel:${business.phone}`}
+                                    data-wipe-name="Kontaktdaten">
                                     {business.phone}
                                   </a>
                                 </div>
                               )}
-                              
+
                               {business.website && (
-                                <div className="mod-WebseiteKompakt">
-                                  <div className="contains-icon-big-homepage webseiteLink">
+                                <div className="mod-WebseiteKompakt no-icon-pseudo" style={{ display: 'flex', alignItems: 'center' }}>
+                                  <div className="webseiteLink" style={{ display: 'flex', alignItems: 'center' }}>
+                                    <img src="/assets/gsbiz/images/ic-webseite.svg" width={20} height={20} alt="Webseite" style={{ marginRight: '6px' }} />
                                     <span className="mod-WebseiteKompakt__text">Webseite</span>
                                   </div>
                                 </div>
@@ -319,7 +323,7 @@ export default function BranchenSearch() {
                       <p>... fehlt in unserer Liste?</p>
                       <span className="gc-btn gc-btn--bordered gc-btn--block">Jetzt Unternehmen eintragen</span>
                     </a>
-                    
+
                     <a href="http://www.bfb.de" className="mod-verlagTeaser gs_teaser_verlag gs_sidebar_modul" target="_blank" rel="noopener">
                       <span className="gs_teaser_title">Ihr Gelbe Seiten Verlag</span>
                       <img loading="lazy" alt="Gelbe Seiten Verlag" className="gs_teaser_verlag_bild" width={0} height={0} src="/assets/branchen/images/4_1.gif" />
