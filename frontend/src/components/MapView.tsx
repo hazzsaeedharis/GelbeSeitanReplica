@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap, Circle } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
@@ -32,6 +32,7 @@ interface MapViewProps {
   zoom?: number;
   onMarkerClick?: (business: Business) => void;
   height?: string;
+  radiusKm?: number; // Search radius in kilometers
 }
 
 function MapViewComponent({
@@ -40,8 +41,41 @@ function MapViewComponent({
   zoom = 12,
   onMarkerClick,
   height = "500px",
+  radiusKm, // Search radius in kilometers
 }: MapViewProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);
+
+  // Component to render the radius circle
+  const RadiusCircle = () => {
+    const map = useMap();
+    
+    useEffect(() => {
+      // Only draw if we have a radius and valid center (using map center if no default center)
+      if (radiusKm && radiusKm > 0 && center) {
+        // Clear existing circles (optional, Leaflet/React handles updates mostly, but good practice if needed)
+        
+        // Draw circle
+        const circle = L.circle(center, {
+          radius: radiusKm * 1000, // Convert km to meters
+          color: '#ffdc00',
+          fillColor: '#ffdc00',
+          fillOpacity: 0.1,
+          weight: 2
+        }).addTo(map);
+
+        // Adjust bounds to fit the circle
+        if (radiusKm && radiusKm > 0 && center) {
+           map.fitBounds(circle.getBounds());
+        }
+
+        return () => {
+          map.removeLayer(circle);
+        };
+      }
+    }, [radiusKm, map, center]);
+
+    return null;
+  };
 
   // Component to fit bounds when businesses change
   const FitBounds = () => {
@@ -156,6 +190,20 @@ function MapViewComponent({
           />
 
           <FitBounds />
+
+          {/* Draw radius circle if center and radius are provided */}
+          {center && radiusKm && radiusKm > 0 && (
+            <Circle
+              center={center}
+              radius={radiusKm * 1000} // Convert km to meters
+              pathOptions={{
+                color: '#ffdc00',
+                fillColor: '#ffdc00',
+                fillOpacity: 0.1,
+                weight: 2,
+              }}
+            />
+          )}
 
           {validBusinesses.map((business) => (
             <Marker
@@ -286,6 +334,20 @@ function MapViewComponent({
             <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
             <FitBounds />
+
+            {/* Draw radius circle if center and radius are provided */}
+            {center && radiusKm && radiusKm > 0 && (
+              <Circle
+                center={center}
+                radius={radiusKm * 1000} // Convert km to meters
+                pathOptions={{
+                  color: '#ffdc00',
+                  fillColor: '#ffdc00',
+                  fillOpacity: 0.1,
+                  weight: 2,
+                }}
+              />
+            )}
 
             {validBusinesses.map((business) => (
               <Marker

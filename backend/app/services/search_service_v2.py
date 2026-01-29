@@ -9,6 +9,7 @@ from sqlalchemy import func, or_
 from geoalchemy2.functions import ST_DWithin, ST_GeogFromText, ST_Distance
 from app.database import Business
 import json
+import math
 from app.elasticsearch_client import search_businesses_es, autocomplete_location
 from app.models.business import BusinessSearchResult
 
@@ -30,6 +31,34 @@ def clean_street_address(street_address: str) -> str:
         parts = parts[:-1]
     
     return ' '.join(parts)
+
+
+def haversine_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    """
+    Calculate the great circle distance between two points on Earth (in km)
+    using the Haversine formula.
+    """
+    if not all([lat1, lon1, lat2, lon2]):
+        return None
+    
+    # Radius of Earth in kilometers
+    R = 6371.0
+    
+    # Convert latitude and longitude from degrees to radians
+    lat1_rad = math.radians(lat1)
+    lon1_rad = math.radians(lon1)
+    lat2_rad = math.radians(lat2)
+    lon2_rad = math.radians(lon2)
+    
+    # Haversine formula
+    dlat = lat2_rad - lat1_rad
+    dlon = lon2_rad - lon1_rad
+    
+    a = math.sin(dlat / 2)**2 + math.cos(lat1_rad) * math.cos(lat2_rad) * math.sin(dlon / 2)**2
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+    
+    distance = R * c
+    return round(distance, 1)  # Round to 1 decimal place
 
 
 class SearchServiceV2:
@@ -93,6 +122,13 @@ class SearchServiceV2:
                     
                     full_address = ", ".join(filter(None, address_parts)) if address_parts else ""
                     
+                    # Calculate distance if search center coordinates are provided
+                    business_lat = business.get('location', {}).get('lat')
+                    business_lon = business.get('location', {}).get('lon')
+                    distance_km = None
+                    if lat and lon and business_lat and business_lon:
+                        distance_km = haversine_distance(lat, lon, business_lat, business_lon)
+                    
                     result = BusinessSearchResult(
                         id=business['id'],
                         name=business['name'],
@@ -102,8 +138,9 @@ class SearchServiceV2:
                         phone=business.get('phone'),
                         website=business.get('website'),
                         branches=business.get('branch_ids', []),
-                        lat=business.get('location', {}).get('lat'),
-                        lon=business.get('location', {}).get('lon')
+                        lat=business_lat,
+                        lon=business_lon,
+                        distance_km=distance_km
                     )
                     results.append(result)
                 
@@ -185,6 +222,11 @@ class SearchServiceV2:
             
             full_address = ", ".join(filter(None, address_parts)) if address_parts else ""
             
+            # Calculate distance if search center coordinates are provided
+            distance_km = None
+            if lat and lon and lat_val and lon_val:
+                distance_km = haversine_distance(lat, lon, lat_val, lon_val)
+            
             result = BusinessSearchResult(
                 id=str(business.id),
                 name=business.name,
@@ -195,7 +237,8 @@ class SearchServiceV2:
                 website=business.website,
                 branches=branches if isinstance(branches, list) else [],
                 lat=lat_val,
-                lon=lon_val
+                lon=lon_val,
+                distance_km=distance_km
             )
             search_results.append(result)
         

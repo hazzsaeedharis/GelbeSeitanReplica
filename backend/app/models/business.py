@@ -82,6 +82,7 @@ class BusinessSearchResult(BaseModel):
     branches: List[str] = []
     lat: Optional[float] = None
     lon: Optional[float] = None
+    distance_km: Optional[float] = None  # Distance from search center in kilometers
 
 
 class SearchResponse(BaseModel):

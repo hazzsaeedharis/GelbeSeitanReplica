@@ -18,9 +18,36 @@ export default function BranchenSearch() {
   const [total, setTotal] = useState(0)
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState(1)
+  const [radius, setRadius] = useState(50) // Default 50km
+  const [searchCenter, setSearchCenter] = useState(null) // [lat, lon]
 
   // API URL - hardcoded for local development
   const API_URL = 'http://localhost:8000'
+
+  // Geocode location to get coordinates
+  useEffect(() => {
+    if (!location) return
+
+    const geocodeLocation = async () => {
+      try {
+        const locationTerm = Array.isArray(location) ? location[0] : location
+        const searchLocation = locationTerm.replace(/_/g, ' ')
+        
+        // Use geocoding API or Nominatim
+        const response = await fetch(`${API_URL}/api/v1/geocode?location=${encodeURIComponent(searchLocation)}`)
+        if (response.ok) {
+          const data = await response.json()
+          if (data.latitude && data.longitude) {
+            setSearchCenter([data.latitude, data.longitude])
+          }
+        }
+      } catch (error) {
+        console.error('Geocoding error:', error)
+      }
+    }
+
+    geocodeLocation()
+  }, [location])
 
   useEffect(() => {
     if (!keyword || !location) return
@@ -34,7 +61,12 @@ export default function BranchenSearch() {
         const searchKeyword = keywordTerm.replace(/_/g, ' ')
         const searchLocation = locationTerm.replace(/_/g, ' ')
 
-        const apiUrl = `${API_URL}/api/v2/search?keyword=${encodeURIComponent(searchKeyword)}&location=${encodeURIComponent(searchLocation)}&page=${page}&page_size=50`
+        // Build API URL with lat/lon if available
+        let apiUrl = `${API_URL}/api/v2/search?keyword=${encodeURIComponent(searchKeyword)}&location=${encodeURIComponent(searchLocation)}&page=${page}&page_size=50&radius=${radius}`
+        if (searchCenter) {
+          apiUrl += `&lat=${searchCenter[0]}&lon=${searchCenter[1]}`
+        }
+        
         console.log('🔍 Fetching from:', apiUrl)
 
         const response = await fetch(apiUrl)
@@ -59,7 +91,7 @@ export default function BranchenSearch() {
     }
 
     fetchResults()
-  }, [keyword, location, page])
+  }, [keyword, location, page, radius, searchCenter])
 
   const keywordDisplay = typeof keyword === 'string' ? keyword.replace(/_/g, ' ').toUpperCase() : ''
   const locationDisplay = typeof location === 'string' ? location.replace(/_/g, ' ') : ''
@@ -184,8 +216,18 @@ export default function BranchenSearch() {
                 <div className="row">
                   <div className="col-12 col-xl-8 flex-column">
                     <div id="gs_suchradius" className="mod mod-RangeSlider active" data-role="suchradius" data-slider-start={0}>
-                      <label className="gs_suchradius__text" htmlFor="suchradius_slider">Umkreis: <span className="gs_suchradius_info_range"><span className="gs_suchradius_info_range_value">0</span> km</span></label>
-                      <input className="gs_suchradius_slider" id="suchradius_slider" max={50000} min={0} name="distance" step={1000} defaultValue={-1} type="range" />
+                      <label className="gs_suchradius__text" htmlFor="suchradius_slider">Umkreis: <span className="gs_suchradius_info_range"><span className="gs_suchradius_info_range_value">{radius}</span> km</span></label>
+                      <input 
+                        className="gs_suchradius_slider" 
+                        id="suchradius_slider" 
+                        max={50} 
+                        min={0} 
+                        name="distance" 
+                        step={1} 
+                        value={radius}
+                        onChange={(e) => setRadius(Number(e.target.value))}
+                        type="range" 
+                      />
                     </div>
                   </div>
                 </div>
@@ -195,9 +237,14 @@ export default function BranchenSearch() {
           </div>
 
           {/* Map Section */}
-          <div className="mod mod-KarteVorschau">
-            <div style={{ width: '100%', height: '260px', backgroundColor: '#f0f0f0' }}>
-              <MapView businesses={results} height="260px" />
+          <div className="mod">
+            <div style={{ width: '100%', height: '260px', backgroundColor: '#f0f0f0', position: 'relative' }}>
+              <MapView 
+                businesses={results} 
+                height="260px" 
+                center={searchCenter || undefined}
+                radiusKm={radius}
+              />
             </div>
           </div>
 
@@ -272,11 +319,15 @@ export default function BranchenSearch() {
                               <address className="mod-AdresseKompakt">
                                 <div>
                                   <div className="mod-AdresseKompakt__container">
-                                    <div className="mod-AdresseKompakt__adress contains-icon-big-adresse"></div>
-                                    <div className="mod-AdresseKompakt__adress-text">
+                                    <div className="mod-AdresseKompakt__adress no-icon-pseudo" style={{ marginRight: '12px' }}>
+                                      <img src="/assets/gsbiz/images/ic-adresse.svg" width={24} height={24} alt="Adresse" style={{ verticalAlign: 'middle' }} />
+                                    </div>
+                                    <div className="mod-AdresseKompakt__adress-text" style={{ marginLeft: 0 }}>
                                       {business.address}
-                                      {business.lat && business.lon && (
-                                        <span className="mod-AdresseKompakt__entfernung" title="Entfernung ab Suchmittelpunkt"></span>
+                                      {business.distance_km && (
+                                        <span className="mod-AdresseKompakt__entfernung" title="Entfernung ab Suchmittelpunkt" style={{ marginLeft: '8px', color: '#666', fontSize: '14px' }}>
+                                          @ {business.distance_km} km
+                                        </span>
                                       )}
                                     </div>
                                   </div>
@@ -284,8 +335,9 @@ export default function BranchenSearch() {
                               </address>
 
                               {business.phone && (
-                                <div className="mod-TelefonnummerKompakt">
-                                  <a className="mod-TelefonnummerKompakt__phoneNumber contains-icon-big-tel"
+                                <div className="mod-TelefonnummerKompakt no-icon-pseudo" style={{ display: 'flex', alignItems: 'center' }}>
+                                  <img src="/assets/gsbiz/images/ic-telefon.svg" width={24} height={24} alt="Telefon" style={{ marginRight: '12px', verticalAlign: 'middle' }} />
+                                  <a className="mod-TelefonnummerKompakt__phoneNumber"
                                     href={`tel:${business.phone}`}
                                     data-wipe-name="Kontaktdaten">
                                     {business.phone}
@@ -294,8 +346,9 @@ export default function BranchenSearch() {
                               )}
 
                               {business.website && (
-                                <div className="mod-WebseiteKompakt">
-                                  <div className="contains-icon-big-homepage webseiteLink">
+                                <div className="mod-WebseiteKompakt no-icon-pseudo" style={{ display: 'flex', alignItems: 'center' }}>
+                                  <div className="webseiteLink" style={{ display: 'flex', alignItems: 'center' }}>
+                                    <img src="/assets/gsbiz/images/ic-webseite.svg" width={24} height={24} alt="Webseite" style={{ marginRight: '12px', verticalAlign: 'middle' }} />
                                     <span className="mod-WebseiteKompakt__text">Webseite</span>
                                   </div>
                                 </div>
