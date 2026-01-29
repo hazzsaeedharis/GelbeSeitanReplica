@@ -104,5 +104,5 @@ alembic/versions/__pycache__/
 wget-test.html
 homepage-rendered.html
 
-# Large data files (optional - uncomment if needed)
-# data/raw/*.json
+# Large data files
+data/raw/*.json
