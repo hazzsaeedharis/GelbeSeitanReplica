@@ -7,7 +7,7 @@ A full-stack replica of the Gelbe Seiten (Yellow Pages) business directory platf
 This project is a complete rebuild of the Gelbe Seiten business directory, featuring:
 - **Backend API**: FastAPI-powered RESTful API with PostgreSQL/Elasticsearch
 - **Frontend**: Modern Next.js + TypeScript web application
-- **Data**: Business directory with 500K+ German businesses
+- **Data**: Business directory with 3m+ German businesses
 - **Search**: Advanced search with geocoding and location-based results
 
 ## 🏗️ Architecture
