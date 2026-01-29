@@ -1,0 +1,13 @@
+{
+	"short_name": "Gelbe Seiten",
+	"name": "Gelbe Seiten",
+	"lang": "de",
+	"description": "Unternehmen finden",
+	"start_url": "https://www.gelbeseiten.de",
+	"background_color": "#ffdc00",
+	"theme_color": "#ffdc00",
+	"dir": "ltr",
+	"display": "browser",
+	"orientation": "any",
+	"prefer_related_applications": "false"
+}
