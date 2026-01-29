@@ -270,7 +270,8 @@
       const location = document.getElementById('where_search')?.value || '';
 
       // Check if user is using geolocation (indicated by "Meinen Standort verwenden" text or stored coordinates)
-      const isUsingGeolocation = (location && location.toLowerCase().includes('meinen standort verwenden')) || userCoordinates !== null;
+      const locationValue = document.getElementById('where_search')?.value || '';
+      const isUsingGeolocation = (locationValue && locationValue.toLowerCase().includes('meinen standort verwenden')) || userCoordinates !== null;
 
       if (!keyword && !isUsingGeolocation) {
         showErrorModal('Bitte geben Sie einen Suchbegriff oder Ort ein');
