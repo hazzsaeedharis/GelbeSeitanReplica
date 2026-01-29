@@ -12,27 +12,42 @@ const MapView = dynamic(() => import('../../../src/components/MapView'), {
 
 export default function BranchenSearch() {
   const router = useRouter()
-  const { keyword, location } = router.query
+  const { keyword, location, lat, lon, radius: urlRadius } = router.query
 
   const [results, setResults] = useState([])
   const [total, setTotal] = useState(0)
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState(1)
-  const [radius, setRadius] = useState(50) // Default 50km
+  const [radius, setRadius] = useState(urlRadius ? Number(urlRadius) : 50) // Default 50km or from URL
   const [searchCenter, setSearchCenter] = useState(null) // [lat, lon]
 
   // API URL - hardcoded for local development
   const API_URL = 'http://localhost:8000'
 
-  // Geocode location to get coordinates
+  // Set search center from URL params or geocode location
   useEffect(() => {
+    // If lat/lon are provided in URL (from geolocation), use them directly
+    if (lat && lon) {
+      const latValue = Array.isArray(lat) ? lat[0] : lat;
+      const lonValue = Array.isArray(lon) ? lon[0] : lon;
+      setSearchCenter([parseFloat(String(latValue)), parseFloat(String(lonValue))])
+      return
+    }
+
+    // Otherwise, geocode the location name
+    // Skip geocoding if location is "standort" (it's a placeholder for geolocation)
     if (!location) return
+    
+    const locationTerm = Array.isArray(location) ? location[0] : location
+    const searchLocation = locationTerm.replace(/_/g, ' ')
+    
+    // Don't geocode "standort" - it's not a real location
+    if (searchLocation.toLowerCase() === 'standort') {
+      return
+    }
 
     const geocodeLocation = async () => {
       try {
-        const locationTerm = Array.isArray(location) ? location[0] : location
-        const searchLocation = locationTerm.replace(/_/g, ' ')
-        
         // Use geocoding API or Nominatim
         const response = await fetch(`${API_URL}/api/v1/geocode?location=${encodeURIComponent(searchLocation)}`)
         if (response.ok) {
@@ -47,7 +62,7 @@ export default function BranchenSearch() {
     }
 
     geocodeLocation()
-  }, [location])
+  }, [location, lat, lon])
 
   useEffect(() => {
     if (!keyword || !location) return
@@ -61,8 +76,17 @@ export default function BranchenSearch() {
         const searchKeyword = keywordTerm.replace(/_/g, ' ')
         const searchLocation = locationTerm.replace(/_/g, ' ')
 
-        // Build API URL with lat/lon if available
-        let apiUrl = `${API_URL}/api/v2/search?keyword=${encodeURIComponent(searchKeyword)}&location=${encodeURIComponent(searchLocation)}&page=${page}&page_size=50&radius=${radius}`
+        // Build API URL
+        // If location is "standort" and we have coordinates, don't pass location parameter
+        // Otherwise, pass the location parameter
+        let apiUrl = `${API_URL}/api/v2/search?keyword=${encodeURIComponent(searchKeyword)}&page=${page}&page_size=50&radius=${radius}`
+        
+        // Only add location if it's not "standort" or if we don't have coordinates
+        if (searchLocation && searchLocation.toLowerCase() !== 'standort') {
+          apiUrl += `&location=${encodeURIComponent(searchLocation)}`
+        }
+        
+        // Add coordinates if available (for geo-search)
         if (searchCenter) {
           apiUrl += `&lat=${searchCenter[0]}&lon=${searchCenter[1]}`
         }

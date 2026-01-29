@@ -147,7 +147,11 @@ class SearchServiceV2:
                 return results, es_results['total']
             
             except Exception as e:
-                print(f"Elasticsearch search failed, falling back to PostgreSQL: {e}")
+                # Silently fall back to PostgreSQL if Elasticsearch is unavailable
+                # Connection errors are expected if Elasticsearch is not running, so we don't log them
+                error_type = type(e).__name__
+                if "Connection" not in error_type and "NewConnectionError" not in str(e):
+                    print(f"Elasticsearch search failed, falling back to PostgreSQL: {e}")
                 # Fall through to PostgreSQL search
         
         # PostgreSQL search (fallback or if ES disabled)
@@ -163,8 +167,9 @@ class SearchServiceV2:
                 )
             )
         
-        # Location filter
-        if location:
+        # Location filter (skip if location is "standort" and we have coordinates)
+        # "standort" is a placeholder for geolocation-based search
+        if location and location.lower() != "standort":
             location_lower = f"%{location.lower()}%"
             query = query.filter(
                 or_(
@@ -172,6 +177,9 @@ class SearchServiceV2:
                     Business.postal_code.like(f"{location}%")
                 )
             )
+        # If location is "standort" but no coordinates provided, return empty results
+        elif location and location.lower() == "standort" and not (lat and lon):
+            return [], 0
         
         # Geo-distance filter (if coordinates provided)
         if lat and lon and Business.geometry is not None:

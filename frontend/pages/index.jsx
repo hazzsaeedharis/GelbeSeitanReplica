@@ -172,9 +172,10 @@ export default function Home() {
                         <div className="mod-Grouped__flex-wrapper">
                           <div className="mod-Input input input--float-label" data-name="WO">
                             <input autoComplete="address-level2" className="input__input input__searchblock" id="where_search" name="WO" placeholder="Wo" spellCheck="false" type="search" defaultValue="" data-suggest-source="/vorschlagsliste/wo" data-wipe="{&quot;listener&quot;: &quot;change&quot;, &quot;name&quot;: &quot;Eingabe in Wo-Suche&quot;, &quot;synchron&quot;: false}" aria-label="Wo" />
-                            <ul className="WO-Vorschalgsliste">
-                              <li className="geolocation-trigger" tabIndex={1} data-wipe="{&quot;listener&quot;: &quot;click&quot;, &quot;name&quot;: &quot;Standorterkennung&quot;, &quot;synchron&quot;: true}">
+                            <ul className="WO-Vorschalgsliste" id="location-dropdown" style={{ display: 'none' }}>
+                              <li className="geolocation-trigger" tabIndex={1} data-wipe="{&quot;listener&quot;: &quot;click&quot;, &quot;name&quot;: &quot;Standorterkennung&quot;, &quot;synchron&quot;: true}" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                                 <span>Meinen Standort verwenden</span>
+                                <img src="/assets/gsbiz/images/ic-compass.svg" alt="" width="16" height="16" style={{ display: 'block' }} />
                               </li>
                             </ul>
                           </div>
