@@ -3,6 +3,9 @@ Production-ready configuration
 Best practices for AWS deployment
 """
 import os
+import json
+from typing import Union, List
+from pydantic import field_validator
 from pydantic_settings import BaseSettings
 from functools import lru_cache
 
@@ -37,15 +40,24 @@ class Settings(BaseSettings):
     API_PORT: int = 8000
     WORKERS: int = 4
     
-    # CORS
-    CORS_ORIGINS: list = [
-        "http://localhost:3000",
-        "http://localhost:3001",
-        "http://192.168.12.214:3000",  # Network access
-        "http://192.168.12.214:3001",  # Network access
-        "http://localhost:8000",
-        "http://127.0.0.1:8000"  # Update for production
-    ]
+    # CORS - can be JSON array string or comma-separated string
+    CORS_ORIGINS: Union[str, List[str]] = "http://localhost:3000,http://localhost:3001,http://192.168.12.214:3000,http://192.168.12.214:3001,http://localhost:8000,http://127.0.0.1:8000"
+    
+    @field_validator('CORS_ORIGINS', mode='before')
+    @classmethod
+    def parse_cors_origins(cls, v):
+        """Parse CORS_ORIGINS from string or list"""
+        if isinstance(v, str):
+            # Try to parse as JSON first
+            try:
+                parsed = json.loads(v)
+                if isinstance(parsed, list):
+                    return parsed
+            except json.JSONDecodeError:
+                pass
+            # Otherwise treat as comma-separated string
+            return [origin.strip() for origin in v.split(',') if origin.strip()]
+        return v
     
     # Security
     SECRET_KEY: str = "change-this-in-production-use-env-variable"
