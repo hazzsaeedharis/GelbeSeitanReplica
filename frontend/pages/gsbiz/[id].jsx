@@ -18,8 +18,8 @@ export default function BusinessDetailPage() {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
 
-    // API URL - hardcoded for local development
-    const API_URL = 'http://localhost:8000'
+    // API URL - use environment variable
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://gelbeseitanreplica-production.up.railway.app'
 
     useEffect(() => {
         if (!id) return

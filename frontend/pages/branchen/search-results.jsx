@@ -21,8 +21,8 @@ export default function BranchenSearch() {
   const [radius, setRadius] = useState(50) // Default 50km
   const [searchCenter, setSearchCenter] = useState(null) // [lat, lon]
 
-  // API URL - hardcoded for local development
-  const API_URL = 'http://localhost:8000'
+  // API URL - use environment variable
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://gelbeseitanreplica-production.up.railway.app'
 
   // Geocode location to get coordinates
   useEffect(() => {
