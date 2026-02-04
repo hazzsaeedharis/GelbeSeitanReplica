@@ -9,10 +9,12 @@ from sqlalchemy import func
 from app.models.business import SearchResponse
 from app.services.search_service_v2 import SearchServiceV2
 from app.database import get_db, Business
+from app.config import get_settings
 import json
 import re
 
 router = APIRouter()
+settings = get_settings()
 
 
 def clean_street_address(street_address: str) -> str:
@@ -57,7 +59,7 @@ async def search_businesses(
     - Fast pagination
     """
     try:
-        service = SearchServiceV2(db, use_elasticsearch=True)
+        service = SearchServiceV2(db, use_elasticsearch=settings.USE_ELASTICSEARCH)
         
         results, total = service.search_businesses(
             keyword=keyword,
@@ -92,7 +94,7 @@ async def autocomplete_cities(
     Returns list of city names matching the prefix
     """
     try:
-        service = SearchServiceV2(db, use_elasticsearch=True)
+        service = SearchServiceV2(db, use_elasticsearch=settings.USE_ELASTICSEARCH)
         cities = service.autocomplete_cities(prefix, limit)
         
         return {
