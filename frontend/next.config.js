@@ -4,7 +4,7 @@ const nextConfig = {
   
   // Environment variables for client-side access
   env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'https://gelbeseitanreplica-production.up.railway.app',
+    NEXT_PUBLIC_API_URL: 'https://gelbeseitanreplica-production.up.railway.app',
   },
   
   // Image optimization
