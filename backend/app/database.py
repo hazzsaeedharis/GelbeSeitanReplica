@@ -7,10 +7,14 @@ from datetime import datetime
 import os
 
 # Database URL from environment or default
-# Using existing events_db with 3M+ pre-loaded businesses
+# Railway provides DATABASE_PUBLIC_URL for external connections
+# Fall back to DATABASE_URL, then local for development
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
-    "postgresql://postgres:password@localhost:5432/events_db"
+    os.getenv(
+        "DATABASE_PUBLIC_URL",
+        "postgresql://postgres:password@localhost:5432/events_db"
+    )
 )
 
 # Create engine

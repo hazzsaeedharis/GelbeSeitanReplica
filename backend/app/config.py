@@ -18,8 +18,12 @@ class Settings(BaseSettings):
     APP_VERSION: str = "2.0.0"
     DEBUG: bool = False
     
-    # Database - using existing events_db with 3M+ businesses already loaded
-    DATABASE_URL: str = "postgresql://postgres:password@localhost:5432/events_db"
+    # Database - Railway provides DATABASE_PUBLIC_URL or DATABASE_URL
+    # Falls back to local for development
+    DATABASE_URL: str = os.getenv(
+        "DATABASE_URL", 
+        os.getenv("DATABASE_PUBLIC_URL", "postgresql://postgres:password@localhost:5432/events_db")
+    )
     DB_POOL_SIZE: int = 20
     DB_MAX_OVERFLOW: int = 40
     DB_POOL_TIMEOUT: int = 30
