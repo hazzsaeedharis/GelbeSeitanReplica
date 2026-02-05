@@ -29,6 +29,21 @@ a {
 .leaflet-container {
   width: 100%;
   height: 100%;
+  overflow: hidden !important;
+}
+
+/* Override Leaflet control z-index to prevent overflow on scroll */
+.leaflet-control-zoom,
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out,
+.leaflet-control-attribution {
+  z-index: 500 !important;
+}
+
+/* Ensure zoom controls stay within map bounds */
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 500 !important;
 }
 
 /* Loading states */

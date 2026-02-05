@@ -212,8 +212,8 @@ export default function BranchenSearch() {
           </div>
 
           {/* Map Section */}
-          <div className="mod">
-            <div style={{ width: '100%', height: '260px', backgroundColor: '#f0f0f0', position: 'relative' }}>
+          <div className="mod" style={{ overflow: 'hidden' }}>
+            <div style={{ width: '100%', height: '260px', backgroundColor: '#f0f0f0', position: 'relative', overflow: 'hidden' }}>
               <MapView
                 businesses={results}
                 height="260px"

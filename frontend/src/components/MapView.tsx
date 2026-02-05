@@ -132,7 +132,7 @@ function MapViewComponent({
 
   return (
     <>
-      <div style={{ height, width: "100%", position: "relative" }}>
+      <div style={{ height, width: "100%", position: "relative", overflow: "hidden" }}>
         {/* Fullscreen Toggle Button */}
         <button
           onClick={toggleFullscreen}
@@ -141,7 +141,7 @@ function MapViewComponent({
             position: "absolute",
             top: "10px",
             right: "10px",
-            zIndex: 1000,
+            zIndex: 500,
             background: "#000",
             border: "none",
             borderRadius: "4px",

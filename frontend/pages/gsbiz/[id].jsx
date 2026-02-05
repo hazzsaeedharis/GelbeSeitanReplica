@@ -314,7 +314,7 @@ export default function BusinessDetailPage() {
 
                     <main>
                         {business.location && (
-                            <div className="mod-KarteImage" data-thisyear={2026} style={{ height: '300px', minHeight: '300px' }}>
+                            <div className="mod-KarteImage" data-thisyear={2026} style={{ height: '300px', minHeight: '300px', overflow: 'hidden' }}>
                                 <MapView
                                     businesses={[{
                                         id: business.id,
