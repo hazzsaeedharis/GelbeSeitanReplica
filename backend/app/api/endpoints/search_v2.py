@@ -44,7 +44,7 @@ async def search_businesses(
     lon: Optional[float] = Query(None, description="Longitude for geo-search"),
     radius: Optional[float] = Query(50, description="Search radius in km"),
     page: int = Query(1, ge=1),
-    page_size: int = Query(20, ge=1, le=100),
+    page_size: int = Query(20, ge=1, le=50),
     sort_by: str = Query("relevance", description="Sort by: relevance, distance, name"),
     db: Session = Depends(get_db)
 ):

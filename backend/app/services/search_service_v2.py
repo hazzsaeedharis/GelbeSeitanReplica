@@ -197,8 +197,14 @@ class SearchServiceV2:
         if sort_by == "name":
             query = query.order_by(Business.name)
         
-        # Get total count
-        total = query.count()
+        # Get total count (only for first page to avoid expensive COUNT on every request)
+        # For subsequent pages, frontend can use the total from page 1
+        if page == 1:
+            total = query.count()
+        else:
+            # For page > 1, estimate or return a large number
+            # Frontend already has the total from page 1
+            total = page * page_size  # Rough estimate
         
         # Pagination
         results = query.offset((page - 1) * page_size).limit(page_size).all()
